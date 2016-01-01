@@ -7,6 +7,9 @@ using Moq;
 using SportsStore.Domain.Abstract;
 using SportsStore.Domain.Entities;
 using SportsStore.WebUI.Controllers;
+using System.Web.Mvc;
+using SportsStore.WebUI.Models;
+using SportsStore.WebUI.HtmlHelpers;
 
 namespace SportsStore.UnitTests
 {
@@ -40,6 +43,26 @@ namespace SportsStore.UnitTests
 
             Assert.AreEqual(prodArray[0].Name, "P4");
             Assert.AreEqual(prodArray[1].Name, "P5");
+        }
+
+        [TestMethod]
+        public void Can_Generate_Page_Links()
+        {
+            HtmlHelper myHelper = null;
+            PagingInfo pagingInfo = new PagingInfo
+            {
+                CurrentPage = 2,
+                TotalItems = 28,
+                ItemsPerPage = 10
+            };
+
+            Func<Int32, String> pageUrlDelegate = i => "Page" + i;
+            MvcHtmlString result = myHelper.PageLinks(pagingInfo, pageUrlDelegate);
+
+            Assert.AreEqual(@"<a class=""btn btn-default"" href=""Page1"">1</a>" +
+                @"<a class=""btn btn-default btn-primary selected"" href=""Page2"">2</a>" +
+                @"<a class=""btn btn-default"" href=""Page3"">3</a>", result.ToString());
+
         }
     }
 }
