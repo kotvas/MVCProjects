@@ -17,7 +17,7 @@ namespace SportsStore.UnitTests
     /// Summary description for Products
     /// </summary>
     [TestClass]
-    public class Products
+    public class ProductTests
     {
         [TestMethod]
         public void Can_Paginate()
