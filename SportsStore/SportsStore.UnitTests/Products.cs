@@ -111,5 +111,49 @@ namespace SportsStore.UnitTests
             Assert.IsTrue(result[1].Name == "P4" && result[1].Category == "Cat2");
 
         }
+
+        [TestMethod]
+        public void Can_Create_Categories()
+        {
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[]
+                {
+                    new Product { ProductID = 1, Name = "P1", Category = "Cat1" },
+                    new Product { ProductID = 2, Name = "P2", Category = "Cat2" },
+                    new Product { ProductID = 3, Name = "P3", Category = "Cat1" },
+                    new Product { ProductID = 4, Name = "P4", Category = "Cat2" },
+                    new Product { ProductID = 5, Name = "P5", Category = "Cat3" }
+                });
+
+            NavController target = new NavController(mock.Object);
+            
+            String[] results = ((IEnumerable<String>)target.Menu().Model).ToArray();
+
+            Assert.AreEqual(results.Length, 3);
+            Assert.AreEqual(results[0], "Cat1");
+            Assert.AreEqual(results[1], "Cat2");
+            Assert.AreEqual(results[2], "Cat3");
+        }
+
+        public void Indicates_Selected_Catefory()
+        {
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[]
+                {
+                    new Product { ProductID = 1, Name = "P1", Category = "Cat1" },
+                    new Product { ProductID = 2, Name = "P2", Category = "Cat2" },
+                    new Product { ProductID = 3, Name = "P3", Category = "Cat1" },
+                    new Product { ProductID = 4, Name = "P4", Category = "Cat2" },
+                    new Product { ProductID = 5, Name = "P5", Category = "Cat3" }
+                });
+
+            NavController target = new NavController(mock.Object);
+
+            String categoryToSelect = "Cat1";
+
+            String result = target.Menu(categoryToSelect).ViewBag.SelectedCategory;
+
+            Assert.AreEqual(result, categoryToSelect);
+        }
     }
 }
